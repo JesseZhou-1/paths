@@ -18,7 +18,7 @@ LazyLoad: yes
 LazyData: yes
 License: GPL (>= 2)
 Depends:
-    R (>= 3.6.0)
+    R (>= 4.5.1)
 Suggests: 
     knitr,
     rmarkdown
