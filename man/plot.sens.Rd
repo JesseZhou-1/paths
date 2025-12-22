@@ -78,6 +78,6 @@ paths_glm <- paths(a = "violence", y = "annex", m = mediators,
 sens_glm <- sens(paths_glm, confounded = "M1", estimand = "via M1",
   gamma_values = - seq(0, 0.5, 0.005), eta_values = seq(-0.5, 0.5, 0.005))
 
-plot(sens_glm)
+# plot(sens_glm)
 
 }

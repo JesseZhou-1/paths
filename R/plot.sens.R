@@ -66,7 +66,7 @@ plot.sens <- function(x, outcome_name = "Outcome", x_axis = c("eta_k", "gamma_k"
   ggplot(data = adjusted, aes_(as.name(x_axis), as.name(y_axis))) +
     geom_raster(aes_(fill = quote(reversed)), show.legend = FALSE, na.rm = TRUE) +
     scale_fill_manual(values = c(NA, "grey70")) +
-    geom_contour(aes_(z = quote(value)), colour = "black") +
+    geom_contour(aes_(z = quote(value), colour = "black")) +
     metR::geom_text_contour(aes_(z = quote(value)), size = 5) +
     labs(x = xlabel, y = ylabel) +
     theme_minimal(base_size = 14)
