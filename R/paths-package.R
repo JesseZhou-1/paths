@@ -5,13 +5,12 @@
 #' bootstrap.
 #'
 #' @author
-#'   Minh Trinh, Massachusetts Institute of Technology,
-#'   \email{mdtrinh@@mit.edu};
-#'   Teppei Yamamoto, Massachusetts Institute of Technology,
-#'   \email{teppei@@mit.edu};
+#'   Minh Trinh, The University of Texas at Austin,
+#'   \email{mdtrinh@@austin.utexas.edu};
+#'   Teppei Yamamoto, Waseda University,
+#'   \email{tyamam@@waseda.jp};
 #'   Xiang Zhou, Harvard University,
 #'   \email{xiang_zhou@@fas.harvard.edu}
-#' @docType package
-#' @name paths-package
 #' @references Zhou, Xiang and Teppei Yamamoto. 2020. "\href{https://osf.io/2rx6p}{Tracing Causal Paths from Experimental and Observational Data}".
-NULL
+#' @keywords internal
+"_PACKAGE"

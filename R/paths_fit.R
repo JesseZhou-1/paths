@@ -14,7 +14,9 @@ paths_fit <- function(data, index = 1:nrow(data), varnames,
     environment(pure) <- environment(hybrid) <- environment()
 
   # fit K+1 outcome models
-  fit_partial <- pryr::partial(fit, newdata = newdata)
+  fit_partial <- function(class, formula, args) {
+    fit(class, formula, args, newdata = newdata)
+  }
   models <- Map(fit_partial, classes, formulas, args)
   cat(".")
 
