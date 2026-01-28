@@ -18,17 +18,17 @@ LazyLoad: yes
 LazyData: yes
 License: GPL (>= 2)
 Depends:
-    R (>= 4.5.0)
-Suggests: 
+    R (>= 4.1.0)
+Suggests:
+    BART,
+    gbm,
+    metR,
+    twang,
     knitr,
     rmarkdown
-Imports: 
-    BART,
+Imports:
     boot,
-    gbm,
     ggplot2,
-    metR,
     stats,
-    twang,
     tidyr
 RoxygenNote: 7.3.3
