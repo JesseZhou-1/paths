@@ -62,7 +62,7 @@ paths_fit <- function(data, index = 1:nrow(data), varnames,
 
   # imputation for the baseline model
   A0 <- A1 <- mfs[[1]]
-  A0[, a] <- 0; A1[, a] <- 1
+  A0[, a] <- dstar; A1[, a] <- d
 
   sink(tempfile())
   imp_y0 <- pred(object = models[[1]], newdata = A0)
