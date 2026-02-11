@@ -87,7 +87,7 @@
 #'
 #' @seealso \code{\link{summary.paths}}, \code{\link{plot.paths}}, \code{\link{sens}}
 #'
-paths <- function(a, y, m, models, ps_model = NULL, data, nboot = 500, conf_level = 0.95, ...){
+paths <- function(a, y, m, models, ps_model = NULL, data, d = 1, dstar = 0, nboot = 500, conf_level = 0.95, ...){
 
   # Get function call
   cl <- match.call()
