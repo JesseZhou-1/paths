@@ -59,8 +59,8 @@ fit <- function(class, formula, args, newdata){
 
 impute <- function(model, mf){
 
-  mf1_untreated <- mf[!treated, , drop = FALSE]; mf1_untreated[, a] <- 1
-  mf0_treated <- mf[treated, , drop = FALSE]; mf0_treated[, a] <- 0
+  mf1_untreated[, a] <- d
+  mf0_treated[, a] <- dstar
 
   sink(tempfile()); on.exit(sink(), add = TRUE)
   imp_y1_untreated <- pred(model, mf1_untreated)
