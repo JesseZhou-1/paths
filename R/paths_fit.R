@@ -3,6 +3,7 @@
 #####################################################
 paths_fit <- function(data, index = 1:nrow(data), varnames,
                       formulas, classes, families, args,
+                      d = 1, dstar = 0,
                       ps_formula, ps_class, ps_family, ps_args){
 
   n <- nrow(data)
@@ -34,7 +35,7 @@ paths_fit <- function(data, index = 1:nrow(data), varnames,
   y <- varnames$y
 
   # treatment indicator
-  treated <- as.logical(newdata[[a]])
+  treated <- newdata[[a]] == d
 
   # output matrices
   pure_out <- hybrid_out <- matrix(NA, nrow = K+2, ncol = 2)
