@@ -105,10 +105,11 @@ paths <- function(a, y, m, models, ps_model = NULL, data, d = 1, dstar = 0, nboo
     stop("'data' must be a data frame with at least three columns.")
 
   # Check if treatment is binary
-  treated <- data[[a]]
-  if(any(treated %notin% c(0, 1)))
-    stop("Treatment must be a binary variable taking 0 or 1 with no missing values.")
-  treated <- as.logical(treated)
+  treated <- data[[a]] == d
+  if(!any(treated))
+    stop("No units with treatment value 'd' found in data.")
+  if(!any(!treated & data[[a]] == dstar))
+    stop("No units with treatment value 'dstar' found in data.")
 
   # Proportion of units treated
   prop_treated <- mean(treated)
@@ -156,6 +157,8 @@ paths <- function(a, y, m, models, ps_model = NULL, data, d = 1, dstar = 0, nboo
                          R = nboot,
                          sim = "ordinary",
                          varnames = varnames,
+                         d = d,
+                         dstar = dstar,
                          formulas = formulas,
                          classes = classes,
                          families = families,
