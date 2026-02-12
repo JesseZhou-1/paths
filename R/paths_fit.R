@@ -34,18 +34,20 @@ paths_fit <- function(data, index = 1:nrow(data), varnames,
   x <- varnames$x
   y <- varnames$y
 
-  # treatment indicator
+  # treatment and control indicators
   treated <- newdata[[a]] == d
+  control <- newdata[[a]] == dstar
 
   # output matrices
   pure_out <- hybrid_out <- matrix(NA, nrow = K+2, ncol = 2)
   measure <- c("pure_Type I", "pure_Type II", "hybrid_Type I", "hybrid_Type II")
   path <- c("direct", paste0("via M", K:1), "total")
 
-  # proportion of units treated
+  # proportion of units treated / control
   sum_treated <- sum(treated)
-  if(sum_treated <= 5 || sum_treated >= n - 5){
-    warning("Too few treated/untreated units. This iteration is ignored.")
+  sum_control <- sum(control)
+  if(sum_treated <= 5 || sum_control <= 5){
+    warning("Too few treated/control units. This iteration is ignored.")
     out <- setNames(c(pure_out, hybrid_out),
                     paste(rep(measure, each = K+2), path, sep = "_"))
     return(out)
@@ -59,6 +61,7 @@ paths_fit <- function(data, index = 1:nrow(data), varnames,
   X <- newdata[, x, drop = FALSE]
   X0 <- X[!treated, , drop = FALSE]
   X1 <- X[treated, , drop = FALSE]
+  X_dstar <- X[control, , drop = FALSE]
 
   # imputation for the baseline model
   A0 <- A1 <- mfs[[1]]
