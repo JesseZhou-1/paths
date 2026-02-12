@@ -2,7 +2,7 @@
 # Utility functions
 #####################################################
 
-utils::globalVariables(c("a", "x", "y", "X", "X0", "X1", "ipw", "treated"))
+utils::globalVariables(c("a", "x", "y", "X", "X0", "X1", "X_dstar", "ipw", "treated", "control"))
 
 `%notin%` <- Negate(`%in%`)
 
@@ -58,28 +58,28 @@ fit <- function(class, formula, args, newdata){
 
 
 impute <- function(model, mf){
-  
-  mf1_untreated <- mf[!treated, , drop = FALSE]   
-  mf0_treated <- mf[treated, , drop = FALSE]       
-  mf1_untreated[, a] <- d
+
+  mf1_control <- mf[control, , drop = FALSE]
+  mf0_treated <- mf[treated, , drop = FALSE]
+  mf1_control[, a] <- d
   mf0_treated[, a] <- dstar
 
   sink(tempfile()); on.exit(sink(), add = TRUE)
-  imp_y1_untreated <- pred(model, mf1_untreated)
+  imp_y1_control <- pred(model, mf1_control)
   imp_y0_treated <- pred(model, mf0_treated)
 
-  list(imp_y1_untreated, imp_y0_treated)
+  list(imp_y1_control, imp_y0_treated)
 }
 
 pure <- function(imp, class, args, family){
 
-  imp_y1_untreated <- imp[[1]]
+  imp_y1_control <- imp[[1]]
   imp_y0_treated <- imp[[2]]
 
   if(class %in% c("pbart", "wbart")){
 
-    args_imp_y1 <- list(x.train = as.matrix(X0),
-                        y.train = imp_y1_untreated,
+    args_imp_y1 <- list(x.train = as.matrix(X_dstar),
+                        y.train = imp_y1_control,
                         x.test = as.matrix(X),
                         rm.const = FALSE)
     args_imp_y0 <- list(x.train = as.matrix(X1),
@@ -98,13 +98,13 @@ pure <- function(imp, class, args, family){
 
     args_imp_y0 <- args_imp_y1 <- args
 
-    args_imp_y1$formula <- as.formula(paste("imp_y1_untreated", " ~ ",
+    args_imp_y1$formula <- as.formula(paste("imp_y1_control", " ~ ",
                                             paste(x, collapse= "+")))
     args_imp_y0$formula <- as.formula(paste("imp_y0_treated", " ~ ",
                                             paste(x, collapse= "+")))
 
     if(class == "gbm"){
-      X0$imp_y1_untreated <- imp_y1_untreated
+      X_dstar$imp_y1_control <- imp_y1_control
       X1$imp_y0_treated <- imp_y0_treated
       args_imp_y1$distribution <- args_imp_y0$distribution <- "gaussian"
 
@@ -112,7 +112,7 @@ pure <- function(imp, class, args, family){
       args_imp_y1$family <- args_imp_y0$family <- paste0("quasi", family[["family"]])
     }
 
-    args_imp_y1$data <- X0
+    args_imp_y1$data <- X_dstar
     args_imp_y0$data <- X1
 
     model_imp_y1 <- do.call(get(class), args_imp_y1)
@@ -130,10 +130,10 @@ pure <- function(imp, class, args, family){
 
 hybrid <- function(imp){
 
-  imp_y1_untreated <- imp[[1]]
+  imp_y1_control <- imp[[1]]
   imp_y0_treated <- imp[[2]]
 
-  imp_Ey1 <- sum(imp_y1_untreated * ipw[!treated], na.rm = TRUE)/sum(ipw[!treated], na.rm = TRUE)
+  imp_Ey1 <- sum(imp_y1_control * ipw[control], na.rm = TRUE)/sum(ipw[control], na.rm = TRUE)
   imp_Ey0 <- sum(imp_y0_treated * ipw[treated], na.rm = TRUE)/sum(ipw[treated], na.rm = TRUE)
 
   c(imp_Ey1, imp_Ey0)
@@ -148,4 +148,3 @@ pval <- function(x){
   }
   out
 }
-
