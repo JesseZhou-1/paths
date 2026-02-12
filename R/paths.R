@@ -14,8 +14,7 @@
 #' When \eqn{K=1}, the path-specific causal effects are identical to the natural direct and indirect
 #' effects in standard causal mediation analysis.
 #'
-#' @param a a character string indicating the name of the treatment variable. The treatment
-#'   should be a binary variable taking either 0 or 1.
+#' @param a a character string indicating the name of the treatment variable.
 #'
 #' @param y a character string indicating the name of the outcome variable.
 #'
@@ -46,6 +45,10 @@
 #'   intervals. Default is \code{0.95}.
 #'
 #' @param data a data frame containing all variables.
+#'
+#' @param d the treatment value for the "treated" condition. Default is 1.
+#'
+#' @param dstar the treatment value for the "control" condition. Default is 0.
 #'
 #' @param ... additional arguments to be passed to \code{boot::boot}, e.g.
 #'   \code{parallel} and \code{ncpus}. For the \code{print} method, additional arguments to be passed to
@@ -104,11 +107,11 @@ paths <- function(a, y, m, models, ps_model = NULL, data, d = 1, dstar = 0, nboo
   if(missing(data) || !is.data.frame(data) || ncol(data) < 3)
     stop("'data' must be a data frame with at least three columns.")
 
-  # Check if treatment is binary
+  # Check that treatment has both d and dstar values
   treated <- data[[a]] == d
   if(!any(treated))
     stop("No units with treatment value 'd' found in data.")
-  if(!any(!treated & data[[a]] == dstar))
+  if(!any(data[[a]] == dstar))
     stop("No units with treatment value 'dstar' found in data.")
 
   # Proportion of units treated
